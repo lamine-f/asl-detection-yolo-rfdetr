@@ -177,13 +177,35 @@ def backspace():
 
 
 def build_ui():
-    with gr.Blocks(title="ASL Detection - YOLO vs RF-DETR", theme=gr.themes.Soft()) as demo:
+    alphabet_path = ROOT / "app" / "assets" / "asl_alphabet.png"
+
+    with gr.Blocks(title="ASL Detection - YOLO vs RF-DETR") as demo:
         gr.Markdown(
             """
             # Détection en Temps Réel de la Langue des Signes (ASL)
             Étude comparative entre **YOLO11n** et **RF-DETR-S** sur les 26 lettres de l'alphabet ASL.
             """
         )
+
+        with gr.Tab("Alphabet ASL"):
+            gr.Markdown(
+                """
+                ## Référence visuelle de l'alphabet ASL
+
+                Chaque tuile montre un échantillon réel du dataset d'entraînement, recadré
+                autour de la main, avec la lettre cible en bas. Utilise cette grille pour
+                **t'entraîner aux signes** avant de passer à l'onglet *Webcam* ou
+                *Épellation*.
+
+                **Astuce démo** : commence par les lettres aux signes très distincts
+                (A, B, C, L, O, Y) avant les plus subtiles (M, N, T).
+                """
+            )
+            if alphabet_path.exists():
+                gr.Image(str(alphabet_path), label="26 lettres ASL", show_label=False,
+                         container=True)
+            else:
+                gr.Markdown("*(Grille de référence non générée — relance `python -c \"...\"` pour la créer)*")
 
         with gr.Tab("1. Comparaison sur image"):
             with gr.Row():
@@ -244,4 +266,9 @@ def build_ui():
 
 if __name__ == "__main__":
     demo = build_ui()
-    demo.queue().launch(server_name="0.0.0.0", server_port=7860, show_error=True)
+    demo.queue().launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+        show_error=True,
+        theme=gr.themes.Soft(),
+    )
