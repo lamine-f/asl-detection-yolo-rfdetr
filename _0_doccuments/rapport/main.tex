@@ -132,14 +132,14 @@ Le tableau~\ref{tab:results} récapitule les performances. La figure~\ref{fig:me
 \toprule
 \textbf{Métrique} & \textbf{YOLO11n} & \textbf{RF-DETR-S} \\
 \midrule
-mAP@0.5             & \TODO{XX.X} & \TODO{XX.X} \\
-mAP@0.5:0.95        & \TODO{XX.X} & \TODO{XX.X} \\
-Précision           & \TODO{XX.X} & \TODO{XX.X} \\
-Rappel              & \TODO{XX.X} & \TODO{XX.X} \\
-F1-score            & \TODO{XX.X} & \TODO{XX.X} \\
-Latence (ms/img)    & \TODO{X.X}  & \TODO{X.X}  \\
-FPS (T4 GPU)        & \TODO{XX}   & \TODO{XX}   \\
-Taille (\si{MB})    & \TODO{X.X}  & \TODO{XX.X} \\
+mAP@0.5             & 0.904 & \TODO{XX.X} \\
+mAP@0.5:0.95        & 0.876 & \TODO{XX.X} \\
+Précision           & 0.879 & \TODO{XX.X} \\
+Rappel              & 0.755 & \TODO{XX.X} \\
+F1-score            & 0.812 & \TODO{XX.X} \\
+Latence (ms/img)    & 23.5  & \TODO{X.X}  \\
+FPS (T4 GPU)        & 42.6  & \TODO{XX}   \\
+Taille (\si{MB})    & 5.21  & \TODO{XX.X} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -152,6 +152,24 @@ Taille (\si{MB})    & \TODO{X.X}  & \TODO{XX.X} \\
 \end{figure}
 
 \textbf{Observation.} \TODO{YOLO/RF-DETR} obtient un meilleur mAP global, ce qui s'explique par \TODO{justification: meilleur recall sur petits objets / convergence plus stable / etc.}. En revanche, \TODO{l'autre modèle} affiche un net avantage en latence et en taille, attendu compte tenu de l'écart de paramètres entre les deux variantes.
+
+\subsection{Convergence et matrice de confusion}
+
+La figure~\ref{fig:yolo_training} présente les courbes d'entraînement de YOLO11n. La perte de validation se stabilise autour de l'\textit{epoch}~30, avec une légère sur-adaptation contenue par l'\textit{early stopping}. Le mAP@0.5 sur la validation atteint 0.951 à l'\textit{epoch}~50, et la généralisation reste solide sur le test set avec un mAP@0.5 de 0.904. La matrice de confusion (figure~\ref{fig:yolo_confusion}) révèle que les confusions résiduelles concernent surtout les lettres aux configurations manuelles voisines (M/N, I/J, K/Q), ce qui est cohérent avec les ambiguïtés rapportées dans les corpus ASL.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_yolo_training_curves.png}
+\caption{Courbes d'entraînement de YOLO11n sur 50 \textit{epochs}~: pertes (haut) et métriques (bas).}
+\label{fig:yolo_training}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_yolo_confusion_matrix.png}
+\caption{Matrice de confusion normalisée de YOLO11n sur le set de validation. Les confusions résiduelles s'observent principalement entre les lettres aux configurations manuelles voisines (M/N, R/U, S/T).}
+\label{fig:yolo_confusion}
+\end{figure}
 
 \subsection{Étude de robustesse}
 
