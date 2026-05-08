@@ -43,8 +43,14 @@ class UnifiedDetector:
             if class_names is None:
                 self._class_names = list(self._model.names.values())
         elif backend == "rfdetr":
+            import torch
             from rfdetr import RFDETRSmall
-            self._model = RFDETRSmall(pretrain_weights=self.weights_path)
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            self._model = RFDETRSmall(pretrain_weights=self.weights_path, device=device)
+            try:
+                self._model.optimize_for_inference()
+            except Exception:
+                pass
             if class_names is None:
                 self._class_names = self._infer_rfdetr_classes()
         else:
@@ -86,12 +92,18 @@ class UnifiedDetector:
         detections = self._model.predict(image, threshold=self.confidence_threshold)
         out = []
         # rfdetr renvoie un sv.Detections
-        if hasattr(detections, "xyxy"):
+        if hasattr(detections, "xyxy") and len(detections.xyxy) > 0:
             for i in range(len(detections.xyxy)):
                 cls_id = int(detections.class_id[i])
                 conf = float(detections.confidence[i])
                 xyxy = tuple(float(x) for x in detections.xyxy[i])
-                name = self._class_names[cls_id] if cls_id < len(self._class_names) else str(cls_id)
+                # Le checkpoint ASL a 27 classes : [Letters, A, B, ..., Z]
+                # On mappe class_id 1..26 -> A..Z, on ignore class_id 0 (Letters parent)
+                if cls_id == 0:
+                    name = "Letters"
+                else:
+                    idx = cls_id - 1
+                    name = self._class_names[idx] if 0 <= idx < len(self._class_names) else str(cls_id)
                 out.append(Detection(
                     class_id=cls_id,
                     class_name=name,

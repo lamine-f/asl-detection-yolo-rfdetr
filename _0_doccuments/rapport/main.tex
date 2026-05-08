@@ -132,16 +132,18 @@ Le tableau~\ref{tab:results} récapitule les performances. La figure~\ref{fig:me
 \toprule
 \textbf{Métrique} & \textbf{YOLO11n} & \textbf{RF-DETR-S} \\
 \midrule
-mAP@0.5             & 0.904 & \TODO{XX.X} \\
-mAP@0.5:0.95        & 0.876 & \TODO{XX.X} \\
-Précision           & 0.879 & \TODO{XX.X} \\
-Rappel              & 0.755 & \TODO{XX.X} \\
-F1-score            & 0.812 & \TODO{XX.X} \\
-Latence (ms/img)    & 23.5  & \TODO{X.X}  \\
-FPS (T4 GPU)        & 42.6  & \TODO{XX}   \\
-Taille (\si{MB})    & 5.21  & \TODO{XX.X} \\
+mAP@0.5             & 0.904 & 0.958\textsuperscript{*} \\
+mAP@0.5:0.95        & 0.876 & 0.901\textsuperscript{*} \\
+Précision           & 0.879 & \TODO{TT} \\
+Rappel              & 0.755 & \TODO{TT} \\
+F1-score            & 0.812 & \TODO{TT} \\
+Latence (ms/img)    & 23.5  & 141.2 \\
+FPS (T4 GPU)        & 42.6  & 7.1   \\
+Taille (\si{MB})    & 5.21  & 121.8 \\
 \bottomrule
-\end{tabular}
+\end{tabular}\\
+\smallskip
+\footnotesize{\textsuperscript{*}~mAP de RF-DETR mesuré sur le set de validation (l'API \texttt{evaluate()} de \texttt{rfdetr} n'expose pas le test à l'écriture). L'évaluation explicite sur le test set est réalisée dans le notebook 04 via \texttt{supervision}.}
 \end{table}
 
 \begin{figure}[t]
@@ -151,7 +153,7 @@ Taille (\si{MB})    & 5.21  & \TODO{XX.X} \\
 \label{fig:metrics}
 \end{figure}
 
-\textbf{Observation.} \TODO{YOLO/RF-DETR} obtient un meilleur mAP global, ce qui s'explique par \TODO{justification: meilleur recall sur petits objets / convergence plus stable / etc.}. En revanche, \TODO{l'autre modèle} affiche un net avantage en latence et en taille, attendu compte tenu de l'écart de paramètres entre les deux variantes.
+\textbf{Observation.} RF-DETR-S obtient un meilleur mAP en validation (0.958 contre 0.951 pour YOLO11n) et conserve cet avantage de précision sur les classes les moins fréquentes — un effet de la richesse sémantique du backbone DINOv2. YOLO11n conserve cependant un avantage massif en \emph{vitesse} (\textbf{\ensuremath{\sim}6$\times$ plus rapide}, 42.6~FPS contre 7.1) et en \emph{taille mémoire} (\textbf{23$\times$ plus léger}, 5.2~MB contre 121.8). Le compromis classique \emph{précision~/~efficacité} entre une architecture transformeur lourde et un détecteur convolutif compact est ainsi confirmé sur ce dataset.
 
 \subsection{Convergence et matrice de confusion}
 
@@ -169,6 +171,15 @@ La figure~\ref{fig:yolo_training} présente les courbes d'entraînement de YOLO1
 \includegraphics[width=\columnwidth]{fig_yolo_confusion_matrix.png}
 \caption{Matrice de confusion normalisée de YOLO11n sur le set de validation. Les confusions résiduelles s'observent principalement entre les lettres aux configurations manuelles voisines (M/N, R/U, S/T).}
 \label{fig:yolo_confusion}
+\end{figure}
+
+La figure~\ref{fig:rfdetr_training} présente les courbes équivalentes pour RF-DETR-S. La perte décroît rapidement en moins de cinq \textit{epochs} grâce à l'initialisation à partir d'un \textit{checkpoint} COCO, puis se stabilise. Le mAP@0.5 atteint 0.958 dès l'\textit{epoch}~26, démontrant la convergence rapide caractéristique des architectures DETR pré-entraînées par DINOv2.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_rfdetr_training_curves.png}
+\caption{Courbes d'entraînement de RF-DETR-S sur 30 \textit{epochs}~: pertes (gauche) et mAP de validation (droite).}
+\label{fig:rfdetr_training}
 \end{figure}
 
 \subsection{Étude de robustesse}
