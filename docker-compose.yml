@@ -1,0 +1,28 @@
+services:
+  asl-detection:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: asl-detection:latest
+    container_name: asl-detection
+    restart: unless-stopped
+    ports:
+      - "7860:7860"
+    environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7860
+      # Décommente si tu veux exposer l'app sur un domaine via Caddy/Nginx :
+      # - GRADIO_ROOT_PATH=/asl
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:7860/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    # Limites de ressources pour un petit VPS (ajuste selon ton plan)
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G

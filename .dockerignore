@@ -1,0 +1,39 @@
+# Git & docs lourds
+.git/
+.gitignore
+_0_doccuments/
+notebooks/
+docs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# Donnees brutes (gardées hors image)
+data/asl_yolo/
+data/processed/
+data/robustness/
+
+# Resultats hors image
+data/results/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Ne PAS exclure :
+# - models/yolo/best.pt
+# - models/rfdetr/checkpoint_best_total.pth
+# - app/, src/, requirements.txt
+
+# Mais on retire les .ckpt lourds inutiles
+models/**/run/*.ckpt
+models/**/run/events.*

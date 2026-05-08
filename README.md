@@ -53,9 +53,44 @@ pip install -r requirements.txt
 
 ## Lancer l'application
 
+### En local (développement)
+
 ```bash
 python app/gradio_app.py
 # → http://127.0.0.1:7860
+```
+
+### Avec Docker (recommandé pour VPS)
+
+Le projet inclut un `Dockerfile` et un `docker-compose.yml` prêts à l'emploi.
+
+**Prérequis sur le VPS** : Docker Engine + Docker Compose plugin, 4 GB RAM minimum, port 7860 ouvert.
+
+```bash
+# 1. Cloner le repo sur le VPS
+git clone <url-du-repo> asl-detection
+cd asl-detection
+
+# 2. Vérifier que les modèles fine-tunés sont bien présents :
+#    models/yolo/best.pt
+#    models/rfdetr/checkpoint_best_total.pth
+#    (sinon, transfère-les en SCP depuis ta machine locale)
+
+# 3. Build & run
+docker compose up -d --build
+
+# 4. Vérifier
+docker compose ps
+docker compose logs -f asl-detection
+```
+
+L'application est accessible sur `http://<ip-vps>:7860`.
+
+**Mise derrière un reverse proxy (Nginx, Caddy, Traefik)** : décommente `GRADIO_ROOT_PATH=/asl` dans `docker-compose.yml` pour servir l'app sous un sous-chemin (`https://mondomaine.fr/asl`).
+
+**Arrêter** :
+```bash
+docker compose down
 ```
 
 ## Reproduire les résultats
