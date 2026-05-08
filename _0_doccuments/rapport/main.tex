@@ -36,7 +36,7 @@ mouhamedlaminefaye.zeitune@gmail.com}
 \maketitle
 
 \begin{abstract}
-La détection d'objets en temps réel sous-tend de nombreuses applications, de la conduite autonome à l'accessibilité numérique. Cet article présente une étude comparative entre deux approches modernes et opposées par leur philosophie : \textbf{YOLO11} (architecture convolutive en une passe) et \textbf{RF-DETR} (transformeur basé sur DINOv2). Nous fine-tunons les variantes \textit{small} de chacun sur le dataset \textit{American Sign Language Letters} (26 classes) puis comparons leurs performances en termes de précision (mAP), de complexité (latence, taille mémoire) et surtout de robustesse face à des dégradations contrôlées (luminosité, bruit gaussien). Le meilleur compromis est ensuite déployé dans une application web temps réel basée sur Gradio, intégrant un mode d'épellation par webcam à visée d'inclusion pour les personnes sourdes et malentendantes. Nos résultats indiquent que \TODO{YOLO/RF-DETR} obtient le meilleur \TODO{mAP=XX} sur les conditions nominales, tandis que \TODO{l'autre modèle} démontre une supériorité en robustesse aux dégradations. Le code et le modèle sont publiés en libre accès.
+La détection d'objets en temps réel sous-tend de nombreuses applications, de la conduite autonome à l'accessibilité numérique. Cet article présente une étude comparative entre deux approches modernes et opposées par leur philosophie : \textbf{YOLO11} (architecture convolutive en une passe) et \textbf{RF-DETR} (transformeur basé sur DINOv2). Nous fine-tunons les variantes \textit{small} de chacun sur le dataset \textit{American Sign Language Letters} (26 classes) puis comparons leurs performances en termes de précision (mAP), de complexité (latence, taille mémoire) et surtout de robustesse face à des dégradations contrôlées (luminosité, bruit gaussien). Le meilleur compromis est ensuite déployé dans une application web temps réel basée sur Gradio, intégrant un mode d'épellation par webcam à visée d'inclusion pour les personnes sourdes et malentendantes. Nos résultats montrent une quasi-égalité en conditions nominales (mAP@0.5 de 0.904 pour YOLO contre 0.901 pour RF-DETR), mais une supériorité spectaculaire de RF-DETR-S en robustesse aux dégradations : chute moyenne de 0.7\,\% contre 16.9\,\% pour YOLO --- avec un écart culminant à 76.8\,\% sous bruit gaussien fort. Le code, les modèles et l'application sont publiés en libre accès.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -132,18 +132,18 @@ Le tableau~\ref{tab:results} récapitule les performances. La figure~\ref{fig:me
 \toprule
 \textbf{Métrique} & \textbf{YOLO11n} & \textbf{RF-DETR-S} \\
 \midrule
-mAP@0.5             & 0.904 & 0.958\textsuperscript{*} \\
-mAP@0.5:0.95        & 0.876 & 0.901\textsuperscript{*} \\
-Précision           & 0.879 & \TODO{TT} \\
-Rappel              & 0.755 & \TODO{TT} \\
-F1-score            & 0.812 & \TODO{TT} \\
-Latence (ms/img)    & 23.5  & 141.2 \\
-FPS (T4 GPU)        & 42.6  & 7.1   \\
-Taille (\si{MB})    & 5.21  & 121.8 \\
+mAP@0.5             & \textbf{0.904} & 0.901 \\
+mAP@0.5:0.95        & 0.875 & \textbf{0.881} \\
+Précision           & 0.879 & --- \\
+Rappel              & 0.755 & --- \\
+F1-score            & 0.812 & --- \\
+Latence (ms/img)    & \textbf{36.4} & 132.8 \\
+FPS (T4 GPU)        & \textbf{27.5} & 7.5   \\
+Taille (\si{MB})    & \textbf{5.21} & 121.8 \\
 \bottomrule
 \end{tabular}\\
 \smallskip
-\footnotesize{\textsuperscript{*}~mAP de RF-DETR mesuré sur le set de validation (l'API \texttt{evaluate()} de \texttt{rfdetr} n'expose pas le test à l'écriture). L'évaluation explicite sur le test set est réalisée dans le notebook 04 via \texttt{supervision}.}
+\footnotesize{Métriques sur le test set de 72 images. L'évaluation RF-DETR utilise \texttt{supervision.metrics.MeanAveragePrecision} sur les annotations COCO (l'API \texttt{rfdetr} n'expose pas la précision/rappel agrégés).}
 \end{table}
 
 \begin{figure}[t]
@@ -153,7 +153,7 @@ Taille (\si{MB})    & 5.21  & 121.8 \\
 \label{fig:metrics}
 \end{figure}
 
-\textbf{Observation.} RF-DETR-S obtient un meilleur mAP en validation (0.958 contre 0.951 pour YOLO11n) et conserve cet avantage de précision sur les classes les moins fréquentes — un effet de la richesse sémantique du backbone DINOv2. YOLO11n conserve cependant un avantage massif en \emph{vitesse} (\textbf{\ensuremath{\sim}6$\times$ plus rapide}, 42.6~FPS contre 7.1) et en \emph{taille mémoire} (\textbf{23$\times$ plus léger}, 5.2~MB contre 121.8). Le compromis classique \emph{précision~/~efficacité} entre une architecture transformeur lourde et un détecteur convolutif compact est ainsi confirmé sur ce dataset.
+\textbf{Observation.} En conditions nominales, les deux modèles offrent des performances très proches en termes de mAP : YOLO11n l'emporte de très peu sur le seuil IoU permissif (mAP@0.5 = 0.904 contre 0.901), tandis que RF-DETR-S est légèrement supérieur sur la métrique stricte mAP@0.5:0.95 (0.881 contre 0.875). L'écart se creuse en revanche sur les critères de complexité : YOLO11n est environ \textbf{3.6$\times$ plus rapide} (27.5~FPS contre 7.5) et \textbf{23$\times$ plus léger} (5.2~MB contre 121.8) sur la même configuration matérielle. Cette quasi-égalité de précision pour un coût fortement asymétrique laisse présumer que la véritable distinction entre les deux architectures se situe ailleurs --- ce que l'étude de robustesse, présentée ci-après, va confirmer de manière éloquente.
 
 \subsection{Convergence et matrice de confusion}
 
@@ -196,12 +196,14 @@ La figure~\ref{fig:robustness} et le tableau~\ref{tab:robustness} présentent l'
 \textbf{Condition} & \multicolumn{2}{c}{\textbf{YOLO11n}} & \multicolumn{2}{c}{\textbf{RF-DETR-S}} \\
                    & mAP & $\Delta\%$ & mAP & $\Delta\%$ \\
 \midrule
-Baseline           & \TODO{X.XX} & 0  & \TODO{X.XX} & 0  \\
-$\gamma=1.5$       & \TODO{X.XX} & \TODO{-X} & \TODO{X.XX} & \TODO{-X} \\
-$\gamma=0.75$      & \TODO{X.XX} & \TODO{-X} & \TODO{X.XX} & \TODO{-X} \\
-$\gamma=0.5$       & \TODO{X.XX} & \TODO{-X} & \TODO{X.XX} & \TODO{-X} \\
-$\sigma=15$        & \TODO{X.XX} & \TODO{-X} & \TODO{X.XX} & \TODO{-X} \\
-$\sigma=35$        & \TODO{X.XX} & \TODO{-X} & \TODO{X.XX} & \TODO{-X} \\
+Baseline           & 0.904 & 0      & 0.901 & 0      \\
+$\gamma=1.5$       & 0.916 & +1.3   & 0.908 & +0.8   \\
+$\gamma=0.75$      & 0.895 & --1.0  & 0.894 & --0.8  \\
+$\gamma=0.5$       & 0.873 & --3.5  & 0.895 & --0.8  \\
+$\sigma=15$        & 0.885 & --2.1  & 0.902 & +0.1   \\
+$\sigma=35$        & \textbf{\color{red}0.210} & \textbf{--76.8} & 0.892 & --1.1  \\
+\midrule
+\textit{Moyenne $|\Delta|$} & --- & \textbf{16.9\%} & --- & \textbf{0.7\%} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -213,7 +215,7 @@ $\sigma=35$        & \TODO{X.XX} & \TODO{-X} & \TODO{X.XX} & \TODO{-X} \\
 \label{fig:robustness}
 \end{figure}
 
-\textbf{Lecture.} On constate que \TODO{YOLO/RF-DETR} subit une chute moins marquée en faible luminosité, ce qui est cohérent avec \TODO{le pré-entraînement DINOv2 sensible aux structures de bas niveau / la robustesse intrinsèque de l'attention globale du transformeur / la pré-entraînement étendu de YOLO sur COCO}. À l'inverse, le bruit gaussien fort impacte plus sévèrement \TODO{YOLO/RF-DETR}, suggérant que \TODO{son raisonnement local par convolutions est plus sensible aux perturbations haute fréquence / l'attention globale dilue le bruit local}.
+\textbf{Lecture.} L'écart entre les deux modèles est saisissant. RF-DETR-S présente une stabilité remarquable face aux dégradations photométriques : sa perte de mAP@0.5 reste inférieure à 1\,\% en moyenne, et il améliore même légèrement ses performances sous bruit modéré ($\sigma\!=\!15$, $+$0.1\,\%) --- effet probable d'une régularisation implicite. À l'opposé, YOLO11n subit une chute moyenne de \textbf{16.9\,\%}, dominée par l'effondrement catastrophique sous bruit gaussien fort ($\sigma\!=\!35$, mAP de 0.21). Cette asymétrie s'explique par la nature des deux architectures : YOLO repose sur un raisonnement local par convolutions, particulièrement sensible aux perturbations haute fréquence, tandis que l'attention globale de RF-DETR et son backbone DINOv2 pré-entraîné sur d'immenses corpus naturels offrent une dilution du bruit et une représentation sémantique plus stable. \textbf{Pour un déploiement en environnement non contrôlé (luminosité changeante, capteur bruité), RF-DETR-S est nettement préférable, malgré son coût computationnel.}
 
 \section{Déploiement}
 
@@ -230,9 +232,13 @@ L'application charge les deux modèles fine-tunés et permet de basculer dynamiq
 
 \subsection{Forces et limites observées}
 
-YOLO11n démontre la légèreté et la rapidité attendues, ce qui en fait un excellent candidat pour des déploiements embarqués. Sa fragilité aux dégradations photométriques modérées plaide cependant pour son utilisation conjointe avec une normalisation \textit{run-time} (CLAHE, \textit{histogram matching}).
+YOLO11n démontre la légèreté et la rapidité attendues, ce qui en fait un excellent candidat pour des déploiements embarqués sur du matériel modeste. Sa précision en conditions nominales reste compétitive avec celle d'un transformeur 23$\times$ plus volumineux, ce qui constitue un argument fort en sa faveur sur les cas d'usage où l'environnement de capture est maîtrisé. Sa fragilité face au bruit gaussien fort (effondrement à 0.21 de mAP) plaide cependant pour son utilisation conjointe avec un pré-traitement (débruitage, CLAHE, \textit{histogram matching}) ou avec un dataset d'entraînement enrichi en augmentations de bruit synthétique.
 
-RF-DETR-S, malgré une taille et une latence supérieures, bénéficie de la richesse de son backbone DINOv2 et présente un comportement plus stable face aux perturbations. Cet avantage devra être confirmé sur d'autres types de dégradations (occlusions, flou de mouvement) avant toute généralisation.
+RF-DETR-S, malgré une taille et une latence supérieures, bénéficie de la richesse sémantique de son backbone DINOv2 et présente un comportement remarquablement stable face aux perturbations photométriques (chute moyenne $<$1\,\%). Cet avantage le désigne naturellement pour les déploiements en environnement non maîtrisé : caméras de surveillance, conditions extérieures, capteurs bas de gamme. Le coût en mémoire (122~MB) reste cependant prohibitif pour les cibles \textit{edge}~; une distillation vers une variante plus compacte serait une piste à explorer.
+
+\subsection{Recommandation pratique}
+
+Pour notre cas d'usage de démonstration (webcam, environnement domestique éclairé), nous retenons \textbf{YOLO11n} pour son excellent compromis vitesse / précision : il permet une expérience temps réel fluide ($>$25 FPS sur GPU et 5--10 FPS sur CPU). Pour une application déployée en production avec des conditions de capture variables, \textbf{RF-DETR-S} serait privilégié.
 
 \subsection{Limitations méthodologiques}
 
@@ -251,7 +257,7 @@ Les pistes prioritaires d'extension sont~:
 
 \section{Conclusion}
 
-Nous avons mené une comparaison équitable de YOLO11n et RF-DETR-S sur la détection d'objets ASL, sous angles classiques (mAP, latence, taille) et complémentaires (robustesse aux dégradations). Notre étude confirme la supériorité respective de chaque modèle selon le critère retenu, et fournit un démonstrateur web fonctionnel orienté accessibilité. Le code, les modèles et le rapport sont publiés sur GitHub.
+Nous avons mené une comparaison équitable de YOLO11n et RF-DETR-S sur la détection d'objets ASL, sous angles classiques (mAP, latence, taille) et complémentaires (robustesse aux dégradations). En conditions nominales, les deux modèles affichent des performances quasi identiques (mAP@0.5 de 0.904 contre 0.901), avec un avantage net de YOLO11n sur les critères d'efficacité. L'étude de robustesse révèle néanmoins une fracture nette : RF-DETR-S préserve son mAP sous toutes les dégradations testées (chute moyenne 0.7\,\%) tandis que YOLO11n s'effondre sous bruit gaussien fort (chute de 76.8\,\%). Cette asymétrie illustre le contraste fondamental entre raisonnement local convolutif et attention globale transformeur, et fournit un guide concret de choix selon le contexte de déploiement. L'application web temps réel et le rapport complet sont publiés sur GitHub.
 
 \bibliographystyle{IEEEtran}
 \begin{thebibliography}{00}
