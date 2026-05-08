@@ -66,6 +66,10 @@ python app/gradio_app.py
 4. Évaluation comparative (`04_evaluation_comparative.ipynb`)
 5. Étude de robustesse (`05_robustness_study.ipynb`)
 
-## Auteur
+## Auteurs
 
-Mouhamed Lamine Faye — DIC3 Deep Learning, 2026.
+Projet réalisé en groupe — DIC3 Deep Learning, 2026 :
+
+- **Mouhamed Lamine Faye**
+- **Pape Moussa Mbengue**
+- **Mouhamadou Wally Ndour**
