@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Data & Models (lourds, gérés hors git)
+data/raw/
+data/processed/
+data/robustness/
+data/*.zip
+models/
+*.pt
+*.pth
+*.onnx
+runs/
+output/
+wandb/
+
+# Jupyter
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.local
+*.key
+
+# LaTeX
+_0_doccuments/rapport/*.aux
+_0_doccuments/rapport/*.log
+_0_doccuments/rapport/*.out
+_0_doccuments/rapport/*.toc
+_0_doccuments/rapport/*.bbl
+_0_doccuments/rapport/*.blg
+_0_doccuments/rapport/*.synctex.gz
+_0_doccuments/rapport/*.fdb_latexmk
+_0_doccuments/rapport/*.fls
+
+# Gradio
+flagged/
+gradio_cached_examples/
