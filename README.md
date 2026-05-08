@@ -68,8 +68,12 @@ python app/gradio_app.py
 
 ## Auteurs
 
-Projet réalisé en groupe — DIC3 Deep Learning, 2026 :
+Projet de Deep Learning réalisé en groupe par :
 
 - **Mouhamed Lamine Faye**
 - **Pape Moussa Mbengue**
 - **Mouhamadou Wally Ndour**
+
+DIC3 — Département Génie Informatique
+École Supérieure Polytechnique
+Université Cheikh Anta Diop de Dakar — 2026
