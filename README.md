@@ -143,6 +143,8 @@ asl-detection-yolo-rfdetr.duckdns.org {
 }
 ```
 
+**Déploiement détaillé** : voir [DEPLOYMENT.md](DEPLOYMENT.md) pour la configuration complète du VPS (specs, Caddy, Docker, optimisations OpenVINO, métriques de performance).
+
 ## Reproduire les résultats
 
 1. **Entraîner YOLO** sur Colab : ouvrir `notebooks/02_yolo_training.ipynb` (Runtime T4 GPU, ~1h30)
