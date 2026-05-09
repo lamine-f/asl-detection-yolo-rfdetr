@@ -1,7 +1,10 @@
 # Détection d'Objets en Temps Réel : YOLO vs RF-DETR
 
+[![Live demo](https://img.shields.io/badge/🚀%20Démo%20live-asl--detection--yolo--rfdetr.duckdns.org-2ea44f)](https://asl-detection-yolo-rfdetr.duckdns.org/)
 [![GitHub](https://img.shields.io/badge/GitHub-lamine--f%2Fasl--detection-181717?logo=github)](https://github.com/lamine-f/asl-detection-yolo-rfdetr)
 [![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-lamine--f--edu%2Fasl--yolo--rfdetr-yellow)](https://huggingface.co/lamine-f-edu/asl-yolo-rfdetr)
+
+> **🌐 Démo en ligne** : https://asl-detection-yolo-rfdetr.duckdns.org/ — webcam fonctionnelle (HTTPS).
 
 Étude comparative entre **YOLO11n** et **RF-DETR-S** pour la détection d'objets en temps réel, appliquée à la **reconnaissance de la langue des signes américaine (ASL)**, avec déploiement sous forme d'application web interactive utilisant la webcam.
 
