@@ -51,6 +51,25 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Téléchargement des modèles fine-tunés
+
+Les poids fine-tunés sont publiés sur **Hugging Face Hub** :
+
+→ https://huggingface.co/lamine-f-edu/asl-yolo-rfdetr
+
+```bash
+# Récupère best.pt (YOLO) et checkpoint_best_total.pth (RF-DETR)
+./scripts/download_models.sh
+```
+
+Ou manuellement :
+
+```python
+from huggingface_hub import hf_hub_download
+hf_hub_download("lamine-f-edu/asl-yolo-rfdetr", "yolo/best.pt", local_dir="models/yolo")
+hf_hub_download("lamine-f-edu/asl-yolo-rfdetr", "rfdetr/checkpoint_best_total.pth", local_dir="models/rfdetr")
+```
+
 ## Lancer l'application
 
 ### En local (développement)
