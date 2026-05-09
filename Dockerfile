@@ -22,9 +22,11 @@ RUN pip install --no-cache-dir --upgrade pip wheel && \
     pip install --no-cache-dir \
         torch torchvision --index-url https://download.pytorch.org/whl/cpu && \
     pip install --no-cache-dir -r /tmp/requirements.txt && \
-    pip install --no-cache-dir opencv-python-headless && \
-    # opencv-python est tiré par ultralytics : on retire la version GUI au profit de la headless
-    pip uninstall -y opencv-python || true
+    # ultralytics tire opencv-python (avec GUI). En serveur on veut la version headless.
+    # Astuce: --force-reinstall --no-deps réécrit les fichiers cv2/ partagés sans toucher
+    # aux autres dépendances ni laisser le paquet "vidé" comme un uninstall direct le ferait.
+    pip install --no-cache-dir --force-reinstall --no-deps opencv-python-headless && \
+    python -c "import cv2; print('cv2 OK', cv2.__version__)"
 
 # 2) Code applicatif et assets
 COPY app/        /app/app/
