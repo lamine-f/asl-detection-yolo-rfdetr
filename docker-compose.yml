@@ -7,7 +7,9 @@ services:
     container_name: asl-detection
     restart: unless-stopped
     ports:
-      - "7860:7860"
+      # Le port host est 7861 pour cohabiter avec l'app locale qui peut tourner sur 7860.
+      # En prod sur VPS, mets 7860:7860.
+      - "7861:7860"
     environment:
       - GRADIO_SERVER_NAME=0.0.0.0
       - GRADIO_SERVER_PORT=7860
