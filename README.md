@@ -6,6 +6,10 @@
 
 > **🌐 Démo en ligne (HTTPS, webcam fonctionnelle)** : https://asl-detection-yolo-rfdetr.duckdns.org/
 
+![Capture de l'application — comparaison YOLO vs RF-DETR sur le signe Z](docs/demo_screenshot.png)
+
+*L'app en action : signe « Z » à deux mains sur fond domestique. YOLO11n (92 ms) ne produit aucune détection, RF-DETR-S (1070 ms) détecte avec une confiance de 0.92 — illustration concrète de l'avantage en robustesse mesuré dans le rapport.*
+
 Étude comparative entre **YOLO11n** et **RF-DETR-S** pour la détection d'objets en temps réel, appliquée à la **reconnaissance de la langue des signes américaine (ASL)**, avec déploiement sous forme d'application web interactive utilisant la webcam.
 
 Projet de Deep Learning, **DIC3 — Génie Informatique — ESP/UCAD — 2026**.

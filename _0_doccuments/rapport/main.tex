@@ -185,7 +185,7 @@ La figure~\ref{fig:rfdetr_training} présente les courbes équivalentes pour RF-
 \label{fig:rfdetr_training}
 \end{figure}
 
-\subsection{Étude de robustesse}
+\subsection{Étude de robustesse}\label{sec:robust}
 
 La figure~\ref{fig:robustness} et le tableau~\ref{tab:robustness} présentent l'évolution du mAP@0.5 sous chaque condition. La chute relative est exprimée en pourcentage par rapport à la baseline (test set non dégradé).
 
@@ -239,7 +239,17 @@ L'application charge les deux modèles fine-tunés et permet de basculer dynamiq
 \end{center}
 
 \noindent
-La connexion HTTPS est nécessaire au fonctionnement de la webcam dans les navigateurs modernes (\texttt{getUserMedia} bloque les contextes non sécurisés). Le code source, les modèles et le rapport sont également disponibles publiquement~:
+La connexion HTTPS est nécessaire au fonctionnement de la webcam dans les navigateurs modernes (\texttt{getUserMedia} bloque les contextes non sécurisés).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{fig_demo_screenshot.png}
+\caption{Capture de l'application en mode \emph{comparaison sur image}. Le signe « Z » est exécuté à deux mains sur fond domestique, condition hors distribution par rapport au dataset d'entraînement. YOLO11n ne produit aucune détection en \SI{93}{\milli\second}, tandis que RF-DETR-S détecte la lettre avec une confiance de 0.92 en \SI{1070}{\milli\second}. Cet exemple qualitatif corrobore les conclusions de l'étude de robustesse (Section~\ref{sec:robust}).}
+\label{fig:demo}
+\end{figure}
+
+\noindent
+Le code source, les modèles et le rapport sont également disponibles publiquement~:
 
 \begin{itemize}\setlength\itemsep{2pt}
   \item \textbf{Code} : \url{https://github.com/lamine-f/asl-detection-yolo-rfdetr}

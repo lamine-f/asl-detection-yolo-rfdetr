@@ -44,7 +44,10 @@ Auteurs : Mouhamed Lamine Faye, Pape Moussa Mbengue, Mouhamadou Wally Ndour
        - all_results.json        : toutes les métriques (test set + 5 conditions)
        - comparison_summary.csv  : tableau comparatif YOLO vs RF-DETR
        - robustness_summary.csv  : étude de robustesse détaillée
-       - figures/                : 5 figures clés du rapport
+       - figures/                : figures clés du rapport, dont
+                                   fig_demo_screenshot.png — capture de
+                                   l'app en action (signe Z hors distribution :
+                                   RF-DETR détecte 0.92, YOLO échoue).
 
   5. 04_notebooks_executes/
      Notebooks Colab avec leurs sorties d'exécution (preuves de reproduction) :

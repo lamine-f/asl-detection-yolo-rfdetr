@@ -261,19 +261,24 @@
 \section{Démonstration}
 
 \begin{frame}{Application Gradio — 4 onglets}
-  \begin{itemize}
-    \item \textbf{Alphabet ASL} : grille de référence des 26 signes.
-    \item \textbf{Comparaison sur image} : YOLO + RF-DETR côte à côte.
-    \item \textbf{Webcam temps réel} : détection live à 27 FPS (YOLO).
-    \item \textbf{Épellation} : maintenir un signe pour l'ajouter au mot.
-  \end{itemize}
-  \begin{block}{Déploiement public}
-    \begin{itemize}
-      \item Image \textbf{Docker} + reverse-proxy \textbf{Caddy} + HTTPS \textbf{Let's Encrypt}.
-      \item URL : \textcolor{espblue}{\textbf{\url{https://asl-detection-yolo-rfdetr.duckdns.org/}}}
+  \begin{columns}[T,onlytextwidth]
+    \column{.42\textwidth}
+    \begin{itemize}\setlength\itemsep{4pt}
+      \item \textbf{Alphabet ASL} : grille de référence des 26 signes.
+      \item \textbf{Comparaison sur image} : YOLO + RF-DETR côte à côte.
+      \item \textbf{Webcam temps réel} : détection live à 27 FPS (YOLO).
+      \item \textbf{Épellation} : maintenir un signe pour l'ajouter au mot.
     \end{itemize}
-  \end{block}
-  \centering\small Webcam fonctionnelle grâce au HTTPS (contrainte navigateur).
+    \medskip
+    \footnotesize
+    Déploiement : \textbf{Docker} + \textbf{Caddy} + Let's Encrypt.\\
+    \textcolor{espblue}{\url{asl-detection-yolo-rfdetr.duckdns.org}}
+
+    \column{.55\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{fig_demo_screenshot.png}\\[2pt]
+    {\tiny Cas hors distribution : RF-DETR détecte le « Z » (0.92), YOLO échoue.}
+  \end{columns}
 \end{frame}
 
 %% ====================================================================
