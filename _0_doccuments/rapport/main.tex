@@ -222,14 +222,29 @@ $\sigma=35$        & \textbf{\color{red}0.210} & \textbf{--76.8} & 0.892 & --1.1
 
 \section{Déploiement}
 
-L'application choisie pour le déploiement est implémentée avec Gradio~\cite{gradio2024}, un framework Python qui permet de construire des interfaces web réactives en quelques dizaines de lignes. Trois onglets sont proposés~:
+L'application choisie pour le déploiement est implémentée avec Gradio~\cite{gradio2024}, un framework Python qui permet de construire des interfaces web réactives en quelques dizaines de lignes. Quatre onglets sont proposés~:
 \begin{enumerate}
+\item Référence visuelle de l'alphabet ASL~;
 \item Comparaison côte à côte sur image téléchargée~;
 \item Détection en flux continu via webcam~;
 \item Mode \textit{épellation}~: la lettre détectée pendant un temps de stabilité paramétrable est ajoutée au mot en cours, avec gestion d'effacement et d'espace.
 \end{enumerate}
 
-L'application charge les deux modèles fine-tunés et permet de basculer dynamiquement entre eux ainsi que d'ajuster le seuil de confiance. Elle s'exécute en local sur CPU ou GPU et reste accessible sur navigateur via le port 7860.
+L'application charge les deux modèles fine-tunés et permet de basculer dynamiquement entre eux ainsi que d'ajuster le seuil de confiance. Elle est conteneurisée (Docker) et publiée en ligne, derrière un \emph{reverse proxy} \textbf{Caddy} avec certificat \textbf{Let's Encrypt} (HTTP/2 et HTTP/3 actifs)~:
+
+\begin{center}
+\fbox{\parbox{0.95\columnwidth}{\centering
+\textbf{Démo en ligne}~:\\[2pt]
+\url{https://asl-detection-yolo-rfdetr.duckdns.org}}}
+\end{center}
+
+\noindent
+La connexion HTTPS est nécessaire au fonctionnement de la webcam dans les navigateurs modernes (\texttt{getUserMedia} bloque les contextes non sécurisés). Le code source, les modèles et le rapport sont également disponibles publiquement~:
+
+\begin{itemize}\setlength\itemsep{2pt}
+  \item \textbf{Code} : \url{https://github.com/lamine-f/asl-detection-yolo-rfdetr}
+  \item \textbf{Modèles} : \url{https://huggingface.co/lamine-f-edu/asl-yolo-rfdetr}
+\end{itemize}
 
 \section{Discussion}
 
