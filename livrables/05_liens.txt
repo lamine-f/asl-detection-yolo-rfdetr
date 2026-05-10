@@ -1,0 +1,22 @@
+================================================================================
+  LIENS PUBLICS DU PROJET
+================================================================================
+
+DÉMO EN LIGNE (HTTPS, webcam fonctionnelle dans le navigateur)
+    https://asl-detection-yolo-rfdetr.duckdns.org/
+
+CODE SOURCE (GitHub)
+    https://github.com/lamine-f/asl-detection-yolo-rfdetr
+
+MODÈLES FINE-TUNÉS (Hugging Face Hub)
+    https://huggingface.co/lamine-f-edu/asl-yolo-rfdetr
+        - yolo/best.pt                       (5.2 MB)
+        - rfdetr/checkpoint_best_total.pth   (121.8 MB)
+
+DATASET (Roboflow Universe)
+    https://public.roboflow.com/object-detection/american-sign-language-letters
+    American Sign Language Letters (David Lee), 26 classes, ~1700 images.
+
+DOCUMENTATION DE DÉPLOIEMENT
+    https://github.com/lamine-f/asl-detection-yolo-rfdetr/blob/main/DEPLOYMENT.md
+    Détaille la stack VPS (Caddy + Let's Encrypt + Docker + OpenVINO).

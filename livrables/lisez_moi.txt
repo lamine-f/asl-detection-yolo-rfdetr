@@ -1,0 +1,114 @@
+================================================================================
+  PROJET ASL DETECTION  —  YOLO11n vs RF-DETR-S
+  DIC3  —  Génie Informatique  —  ESP/UCAD  —  2026
+================================================================================
+
+Auteurs : Mouhamed Lamine Faye, Pape Moussa Mbengue, Mouhamadou Wally Ndour
+
+--------------------------------------------------------------------------------
+ LIENS ESSENTIELS
+--------------------------------------------------------------------------------
+
+  Démo en ligne (HTTPS, webcam fonctionnelle) :
+      https://asl-detection-yolo-rfdetr.duckdns.org/
+
+  Code source (GitHub, public) :
+      https://github.com/lamine-f/asl-detection-yolo-rfdetr
+
+  Modèles fine-tunés (Hugging Face, public) :
+      https://huggingface.co/lamine-f-edu/asl-yolo-rfdetr
+
+--------------------------------------------------------------------------------
+ ORDRE DE LECTURE SUGGÉRÉ (pour la correction)
+--------------------------------------------------------------------------------
+
+  1. 01_rapport.pdf
+     Rapport scientifique au format IEEE conference, 5 pages.
+     Contient toute la méthodologie, les résultats nominaux, l'étude de
+     robustesse, la discussion et les perspectives.
+
+  2. Démo en ligne (lien ci-dessus)
+     Application Gradio publique avec 4 onglets :
+       - Référence visuelle de l'alphabet ASL (26 lettres)
+       - Comparaison YOLO vs RF-DETR sur image téléchargée
+       - Détection en flux continu via webcam
+       - Mode épellation (les lettres maintenues stable s'ajoutent au mot)
+     Aucune installation nécessaire, juste un navigateur récent.
+
+  3. 02_slides.pdf
+     Slides de soutenance (Beamer, thème metropolis), 20 pages.
+     Vue condensée pour suivre la présentation orale.
+
+  4. 03_resultats/
+     Résultats bruts en JSON et CSV pour vérification chiffrée.
+       - all_results.json        : toutes les métriques (test set + 5 conditions)
+       - comparison_summary.csv  : tableau comparatif YOLO vs RF-DETR
+       - robustness_summary.csv  : étude de robustesse détaillée
+       - figures/                : 5 figures clés du rapport
+
+  5. 04_notebooks_executes/
+     Notebooks Colab avec leurs sorties d'exécution (preuves de reproduction) :
+       - 02_yolo_training.ipynb               (entraînement YOLO11n, T4 GPU)
+       - 03_rfdetr_training.ipynb             (entraînement RF-DETR-S, T4 GPU)
+       - 04_evaluation_and_robustness.ipynb   (évaluation + robustesse)
+
+--------------------------------------------------------------------------------
+ FAITS SAILLANTS
+--------------------------------------------------------------------------------
+
+  PERFORMANCE NOMINALE (test set, 72 images)
+
+      Métrique           YOLO11n      RF-DETR-S
+      mAP@0.5            0.904        0.901
+      mAP@0.5:0.95       0.875        0.881
+      Latence (T4 GPU)   36.4 ms      132.8 ms
+      FPS                27.5         7.5
+      Taille modèle      5.21 MB      121.8 MB
+
+  -> Précision quasi identique. YOLO est ~3.6x plus rapide et 23x plus léger.
+
+  ROBUSTESSE (5 conditions dégradées : luminosité + bruit gaussien)
+
+      Condition          YOLO Δ%      RF-DETR Δ%
+      gamma = 1.5        +1.3         +0.8
+      gamma = 0.75       -1.0         -0.8
+      gamma = 0.5        -3.5         -0.8
+      sigma = 15         -2.1         +0.1
+      sigma = 35         -76.8        -1.1
+      Chute moyenne      16.9%        0.7%
+
+  -> RF-DETR-S est dramatiquement plus robuste. YOLO s'effondre à 0.21 mAP
+     sous bruit fort tandis que RF-DETR reste à 0.89.
+
+  -> Recommandation : YOLO pour edge / temps réel en environnement maîtrisé,
+     RF-DETR pour environnement bruité ou non maîtrisé.
+
+--------------------------------------------------------------------------------
+ ORGANISATION DU DÉPÔT (au-delà de ce dossier)
+--------------------------------------------------------------------------------
+
+  Le repo GitHub contient également :
+    - app/                      Application Gradio (gradio_app.py + assets)
+    - src/                      Wrapper unifié YOLO+RF-DETR, robustesse
+    - notebooks/                Notebooks Colab (versions sources sans outputs)
+    - Dockerfile                Image Docker du déploiement (Python 3.12-slim)
+    - docker-compose.yml        Stack de déploiement (Caddy en amont)
+    - DEPLOYMENT.md             Documentation détaillée du déploiement VPS
+                                (Caddy, Let's Encrypt, OpenVINO, optimisations)
+    - README.md                 Vue d'ensemble du projet avec badges
+
+--------------------------------------------------------------------------------
+ RELANCER LA DÉMO LOCALEMENT (3 commandes)
+--------------------------------------------------------------------------------
+
+  git clone https://github.com/lamine-f/asl-detection-yolo-rfdetr
+  cd asl-detection-yolo-rfdetr
+  ./scripts/download_models.sh    # télécharge les modèles depuis Hugging Face
+  python app/gradio_app.py        # ouvre http://127.0.0.1:7860
+
+  Ou via Docker :
+      docker compose up -d --build
+
+--------------------------------------------------------------------------------
+
+  Bonne lecture, et merci pour votre attention.
